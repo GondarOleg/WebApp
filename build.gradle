@@ -20,7 +20,17 @@ dependencies {
     compile group: 'javax.servlet', name: 'servlet-api', version: '3.0-alpha-1'
 
 }
+task myTask1(type: MyTask)
 
+task myTask2(type: MyTask) {
+    message = '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n' +
+            'Running second task!\n' +
+            '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+}
+
+clean.dependsOn.add(myTask2)
+
+test.dependsOn.add(myTask1)
 
 test {
     testLogging {
@@ -28,15 +38,12 @@ test {
     }
 }
 
-task myTask1(type: MyTask)
-
-task myTask2(type: MyTask){
-    message = 'second message'
-}
-
 class MyTask extends DefaultTask {
 
-    String message = 'first message'
+    String message = '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n' +
+            'Running first task!\n' +
+            '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+
     @TaskAction
     def greet() {
         println message

@@ -3,12 +3,6 @@
         Build with Ant
     </description>
 
-
-    <!--
-  ================
-  Build properties
-  ================
-  -->
     <property name="src.dir"          location="src/main/java"/>
     <property name="resources.dir"    location="src/main/resources"/>
     <property name="web.dir"          location="src/main/webapp"/>
@@ -18,20 +12,14 @@
     <property name="test.classes.dir" location="${build.dir}/test-classes"/>
     <property name="ivy.reports.dir"  location="${build.dir}/ivy-reports"/>
     <property name="test.reports.dir" location="${build.dir}/test-reports"/>
-    <property name="dist.dir"         location="${build.dir}/dist"/>
+    <property name="dist.dir"         location="${build.dir}/libs"/>
 
-
-    <property name="jar.main.class" value="Main"/>
-    <property name="jar.file"       value="${dist.dir}/${ant.project.name}.jar"/>
-    <property name="war.file"       value="${dist.dir}/${ant.project.name}.war"/>
+    <property name="jar.main.class"   value="Main"/>
+    <property name="jar.file"         value="${dist.dir}/${ant.project.name}.jar"/>
+    <property name="war.file"         value="${dist.dir}/${ant.project.name}.war"/>
 
     <available classname="org.apache.ivy.Main" property="ivy.installed"/>
 
-    <!--
-    ===========
-    Build setup
-    ===========
-    -->
     <target name="install-ivy" description="Install ivy" unless="ivy.installed">
         <mkdir dir="${user.home}/.ant/lib"/>
         <get dest="${user.home}/.ant/lib/ivy.jar" src="http://search.maven.org/remotecontent?filepath=org/apache/ivy/ivy/2.3.0/ivy-2.3.0.jar"/>
@@ -47,11 +35,6 @@
         <ivy:cachepath pathid="test.path"    conf="test"/>
     </target>
 
-    <!--
-    ===============
-    Compile targets
-    ===============
-    -->
     <target name="resources" description="Copy resources into classpath">
         <copy todir="${classes.dir}">
             <fileset dir="${resources.dir}"/>
@@ -73,11 +56,6 @@
         </javac>
     </target>
 
-    <!--
-    ============
-    Test targets
-    ============
-    -->
     <target name="test" depends="compile-tests" description="Run unit tests">
         <mkdir dir="${test.reports.dir}"/>
         <junit printsummary="yes" haltonfailure="yes">
@@ -96,11 +74,6 @@
         </junit>
     </target>
 
-    <!--
-    =====================
-    Build and run targets
-    =====================
-    -->
     <target name="build-war" depends="test" description="Create war archive">
 
         <ivy:retrieve pattern="${dist.dir}/lib/[artifact]-[revision](-[classifier]).[ext]" conf="runtime"/>
@@ -124,7 +97,8 @@
 
     </target>
 
-    <target name="build" depends="test" description="Create executable jar archive">
+    <target name="build-jar" depends="test" description="Create executable jar archive">
+
         <ivy:retrieve pattern="${dist.dir}/lib/[artifact]-[revision](-[classifier]).[ext]" conf="runtime"/>
 
         <manifestclasspath property="jar.classpath" jarfile="${jar.file}">
@@ -141,18 +115,11 @@
         </jar>
     </target>
 
-    <target name="run" depends="build" description="Run code">
+    <target name="run" depends="build-jar" description="Run code">
         <java jar="${jar.file}" fork="true"/>
     </target>
 
 
-
-
-    <!--
-    =============
-    Clean targets
-    =============
-    -->
     <target name="clean" description="Cleanup build files">
         <delete dir="${build.dir}"/>
     </target>
