@@ -1,4 +1,4 @@
-<project name="WebApp" default="main" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="WebApp" default="build-war" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
     <description>
         Build with Ant
     </description>
