@@ -1,5 +1,6 @@
 ﻿Making projects by different builders:
-All builders support the standard goals: build (install to maven), clean, test
+
+(Builder must be previously installed)
 
 Features of assembly
 
